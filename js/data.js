@@ -1,6 +1,6 @@
 'use strict';
 
-window.data = (function () {
+(function () {
 
   var FEATURES = [' wifi', ' dishwasher', ' parking', ' washer', ' elevator', ' conditioner'];
   var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
@@ -65,7 +65,7 @@ window.data = (function () {
     return ads;
   };
 
-  return {
+  window.data = {
     generateAds: generateAds,
   };
 })();

@@ -1,6 +1,7 @@
 'use strict';
 
-window.card = (function () {
+(function () {
+  var adCard = document.querySelector('#card').content.querySelector('.map__card');
 
   var ACCOMODATION_TYPES = {
     'palace': {
@@ -52,7 +53,6 @@ window.card = (function () {
   };
 
   var createAdCard = function (ad) {
-    var adCard = document.querySelector('#card').content.querySelector('.map__card');
     var adCardElement = adCard.cloneNode(true);
 
     adCardElement.querySelector('.popup__title').textContent = ad.offer.title;
@@ -69,8 +69,8 @@ window.card = (function () {
     return adCardElement;
   };
 
-  return {
-    createAdCard: createAdCard,
+  window.card = {
+    create: createAdCard,
     ACCOMODATION_TYPES: ACCOMODATION_TYPES,
   };
 })();

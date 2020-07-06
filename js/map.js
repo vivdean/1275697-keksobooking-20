@@ -1,67 +1,28 @@
 'use strict';
 
-window.map = (function () {
-  var MAIN_PIN_WIDTH = 62 / 2;
-  var MAIN_PIN_HEIGHT = 62 / 2;
+(function () {
+  var HALF_MAIN_PIN_WIDTH = 62 / 2;
+  var HALF_MAIN_PIN_HEIGHT = 62 / 2;
   var MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE = 84;
-  var MAIN_PIN_LOCATION_X = 570;
-  var MAIN_PIN_LOCATION_Y = 375;
   var PINS_COUNT = 5;
-  var ADS_COUNT = 8;
-  var ENTER_BTN = 13;
   var ESC_BTN = 27;
 
   var map = document.querySelector('.map');
   var mapForm = map.querySelector('.map__filters');
   var mapFormElements = mapForm.querySelectorAll('fieldset, selest');
-  var mainPin = document.querySelector('.map__pin--main');
   var mapFiltersContainer = map.querySelector('.map__filters-container');
   var mapPinsContainer = map.querySelector('.map__pins');
-  var addressInput = document.querySelector('input[name="address"]');
 
-  var isMapActive = false;
-
-  var ads = window.data.generateAds(ADS_COUNT);
-
-  var setDisabledAttribute = function (formElements) {
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].setAttribute('disabled', true);
-    }
+  var deactivateMap = function () {
+    window.util.setDisabledAttribute(mapFormElements);
+    window.pin.setMainElementPosition(HALF_MAIN_PIN_WIDTH, HALF_MAIN_PIN_HEIGHT);
   };
 
-  var removeDisabledAttribute = function (formElements) {
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].removeAttribute('disabled', true);
-    }
-  };
-
-  var setMainPinPosition = function (width, height) {
-    var mainPinX = Math.floor(MAIN_PIN_LOCATION_X + width);
-    var mainPinY = Math.floor(MAIN_PIN_LOCATION_Y + height);
-    var mainPinPosition = mainPinX + ', ' + mainPinY;
-    addressInput.value = mainPinPosition;
-  };
-
-  var deactivatePage = function () {
-    setDisabledAttribute(window.form.adFormElements);
-    setDisabledAttribute(mapFormElements);
-    setMainPinPosition(MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT);
-    isMapActive = false;
-  };
-
-  var activatePage = function () {
-    if (!isMapActive) {
-      map.classList.remove('map--faded');
-      window.form.adForm.classList.remove('ad-form--disabled');
-      window.form.adFormAddress.setAttribute('readonly', true);
-
-      removeDisabledAttribute(window.form.adFormElements);
-      removeDisabledAttribute(mapFormElements);
-
-      renderMapPins(PINS_COUNT);
-      isMapActive = true;
-      setMainPinPosition(MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE);
-    }
+  var activateMap = function () {
+    map.classList.remove('map--faded');
+    window.util.removeDisabledAttribute(mapFormElements);
+    window.pin.render(PINS_COUNT, mapPinsContainer);
+    window.pin.setMainElementPosition(HALF_MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE);
   };
 
   var hideEmptyAdCardBlocks = function (adCardElement) {
@@ -75,18 +36,8 @@ window.map = (function () {
     }
   };
 
-  var renderMapPins = function () {
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < PINS_COUNT; i++) {
-      fragment.appendChild(window.pin.createMapPin(ads[i]));
-    }
-
-    mapPinsContainer.appendChild(fragment);
-  };
-
   var renderAdCard = function (ad) {
-    var adCardElement = window.card.createAdCard(ad);
+    var adCardElement = window.card.create(ad);
     map.insertBefore(adCardElement, mapFiltersContainer);
 
     closeCard();
@@ -103,7 +54,7 @@ window.map = (function () {
     }
     var mapPinId = Number(mapPin.dataset.id);
 
-    var targetAd = ads.find(function (ad) {
+    var targetAd = window.pin.ads.find(function (ad) {
       return ad.id === mapPinId;
     });
 
@@ -124,18 +75,6 @@ window.map = (function () {
     document.removeEventListener('click', onPopupEscPress);
   };
 
-  mainPin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_BTN) {
-      activatePage();
-    }
-  });
-
-  mainPin.addEventListener('mousedown', function (evt) {
-    if (evt.which === 1) {
-      activatePage();
-    }
-  });
-
   var onPopupCloseBtnPress = function (evt) {
     var closeBtn = document.querySelector('.popup__close');
     if (evt.target === closeBtn) {
@@ -150,9 +89,8 @@ window.map = (function () {
     }
   };
 
-  return {
-    renderMapPins: renderMapPins,
-    deactivatePage: deactivatePage,
-    activatePage: activatePage
+  window.map = {
+    deactivate: deactivateMap,
+    activate: activateMap,
   };
 })();
