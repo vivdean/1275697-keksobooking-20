@@ -1,10 +1,11 @@
 'use strict';
 
-window.form = (function () {
+(function () {
+  var MAX_ROOMS = 100;
 
   var adForm = document.querySelector('.ad-form');
-  var adFormElements = adForm.querySelectorAll('fieldset');
-  var adFormAddress = adForm.querySelector('#address');
+  var fieldsets = adForm.querySelectorAll('fieldset');
+  var addressField = adForm.querySelector('#address');
   var roomNumber = adForm.querySelector('#room_number');
   var roomCapacity = adForm.querySelector('#capacity');
   var accomodationPrice = adForm.querySelector('#price');
@@ -12,11 +13,25 @@ window.form = (function () {
   var timeIn = adForm.querySelector('#timein');
   var timeOut = adForm.querySelector('#timeout');
 
+  var deactivateForm = function () {
+    window.util.setDisabledAttribute(fieldsets);
+  };
+
+  var activateForm = function () {
+    adForm.classList.remove('ad-form--disabled');
+    addressField.setAttribute('readonly', true);
+    window.util.removeDisabledAttribute(fieldsets);
+  };
+
+  var setAddress = function (el) {
+    addressField.value = el;
+  };
+
   var validateRoomCapacity = function () {
     var roomNumberValue = Number(roomNumber.value);
     var roomCapacityValue = Number(roomCapacity.value);
 
-    if (roomNumberValue === 100 && roomCapacityValue !== 0 || roomNumberValue !== 100 && roomCapacityValue === 0) {
+    if (roomNumberValue === MAX_ROOMS && roomCapacityValue !== 0 || roomNumberValue !== MAX_ROOMS && roomCapacityValue === 0) {
       roomCapacity.setCustomValidity('Не для гостей');
       return;
     }
@@ -37,7 +52,6 @@ window.form = (function () {
 
   var addTypeChangeHandler = function (evt) {
     var minPrice = window.card.ACCOMODATION_TYPES[evt.target.value].minPrice;
-
     setMinPrice(minPrice);
   };
 
@@ -57,9 +71,9 @@ window.form = (function () {
   setChangeTime(timeIn, timeOut);
   setChangeTime(timeOut, timeIn);
 
-  return {
-    adForm: adForm,
-    adFormAddress: adFormAddress,
-    adFormElements: adFormElements,
+  window.form = {
+    deactivate: deactivateForm,
+    activate: activateForm,
+    setAddress: setAddress,
   };
 })();
