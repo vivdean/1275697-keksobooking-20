@@ -3,8 +3,7 @@
 (function () {
   var mapPin = document.querySelector('#pin').content.querySelector('.map__pin');
   var mainPin = document.querySelector('.map__pin--main');
-  var ADS_COUNT = 8;
-  var ads = window.data.generateAds(ADS_COUNT);
+  var MAX_PINS_COUNT = 5;
 
   var pinParameters = {
     halfWidth: 50 / 2,
@@ -42,12 +41,13 @@
     return pinElement;
   };
 
-  var renderMapPins = function (count, container) {
+  var renderMapPins = function (arr) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < count; i++) {
-      fragment.appendChild(createMapPin(ads[i]));
+    for (var i = 0; i < MAX_PINS_COUNT; i++) {
+      arr[i].id = (i + 1);
+      fragment.appendChild(createMapPin(arr[i]));
     }
-    container.appendChild(fragment);
+    window.map.mapPinsContainer.appendChild(fragment);
   };
 
   var setMainPinPosition = function (width, height) {
@@ -109,7 +109,6 @@
 
   window.pin = {
     render: renderMapPins,
-    ads: ads,
     mainElement: mainPin,
     setMainElementPosition: setMainPinPosition,
   };

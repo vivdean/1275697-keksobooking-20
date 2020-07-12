@@ -4,7 +4,6 @@
   var HALF_MAIN_PIN_WIDTH = 62 / 2;
   var HALF_MAIN_PIN_HEIGHT = 62 / 2;
   var MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE = 84;
-  var PINS_COUNT = 5;
   var ESC_BTN = 27;
 
   var map = document.querySelector('.map');
@@ -21,7 +20,7 @@
   var activateMap = function () {
     map.classList.remove('map--faded');
     window.util.removeDisabledAttribute(mapFormElements);
-    window.pin.render(PINS_COUNT, mapPinsContainer);
+    window.backend.load(window.main.onSuccess, window.main.onError);
     window.pin.setMainElementPosition(HALF_MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE);
   };
 
@@ -54,7 +53,7 @@
     }
     var mapPinId = Number(mapPin.dataset.id);
 
-    var targetAd = window.pin.ads.find(function (ad) {
+    var targetAd = window.offers.find(function (ad) {
       return ad.id === mapPinId;
     });
 
@@ -92,5 +91,6 @@
   window.map = {
     deactivate: deactivateMap,
     activate: activateMap,
+    mapPinsContainer: mapPinsContainer,
   };
 })();
