@@ -76,7 +76,7 @@
     successElement.remove();
     deactivatePage();
     document.removeEventListener('keydown', onSuccessEscPress);
-    successElement.removeEventListener('click', onSuccessCloseBtnPress);
+    successElement.removeEventListener('click', onSuccessCloseClick);
   };
 
   var onError = function (message) {
