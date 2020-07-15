@@ -1,9 +1,11 @@
 'use strict';
 
 (function () {
-  var mapPin = document.querySelector('#pin').content.querySelector('.map__pin');
+  var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mainPin = document.querySelector('.map__pin--main');
   var MAX_PINS_COUNT = 5;
+  var HALF_MAIN_PIN_WIDTH = 62 / 2;
+  var HALF_MAIN_PIN_HEIGHT = 62 / 2;
 
   var pinParameters = {
     halfWidth: 50 / 2,
@@ -13,6 +15,11 @@
   var mainPinParameters = {
     halfWidth: 62 / 2,
     height: 84,
+  };
+
+  var defaultMainPinPosition = {
+    top: 375,
+    left: 570
   };
 
   var bounds = {
@@ -27,7 +34,7 @@
   };
 
   var createMapPin = function (ad) {
-    var pinElement = mapPin.cloneNode(true);
+    var pinElement = mapPinTemplate.cloneNode(true);
     var pinImg = pinElement.querySelector('img');
 
     pinElement.style.left = ad.location.x - pinParameters.halfWidth + 'px';
@@ -44,7 +51,6 @@
   var renderMapPins = function (arr) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < MAX_PINS_COUNT; i++) {
-      arr[i].id = (i + 1);
       fragment.appendChild(createMapPin(arr[i]));
     }
     window.map.mapPinsContainer.appendChild(fragment);
@@ -56,6 +62,21 @@
 
     var mainPinPosition = mainPinX + ', ' + mainPinY;
     window.form.setAddress(mainPinPosition);
+  };
+
+  var setDefaultMainPinPosition = function () {
+    mainPin.style.left = defaultMainPinPosition.left + 'px';
+    mainPin.style.top = defaultMainPinPosition.top + 'px';
+    setMainPinPosition(HALF_MAIN_PIN_WIDTH, HALF_MAIN_PIN_HEIGHT);
+  };
+
+  var removeMapPins = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    if (pins) {
+      pins.forEach(function (pinItem) {
+        pinItem.remove();
+      });
+    }
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
@@ -111,5 +132,8 @@
     render: renderMapPins,
     mainElement: mainPin,
     setMainElementPosition: setMainPinPosition,
+    remove: removeMapPins,
+    setDefaultMainPinPosition: setDefaultMainPinPosition,
+    HALF_MAIN_PIN_WIDTH: HALF_MAIN_PIN_WIDTH,
   };
 })();
