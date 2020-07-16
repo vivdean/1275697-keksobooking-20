@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var HALF_MAIN_PIN_WIDTH = 62 / 2;
-  var HALF_MAIN_PIN_HEIGHT = 62 / 2;
   var MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE = 84;
   var ESC_BTN = 27;
 
@@ -12,16 +10,19 @@
   var mapFiltersContainer = map.querySelector('.map__filters-container');
   var mapPinsContainer = map.querySelector('.map__pins');
 
+
   var deactivateMap = function () {
     window.util.setDisabledAttribute(mapFormElements);
-    window.pin.setMainElementPosition(HALF_MAIN_PIN_WIDTH, HALF_MAIN_PIN_HEIGHT);
+    window.pin.setDefaultMainPinPosition();
+    map.classList.add('map--faded');
+    window.pin.remove();
+    removeCard();
   };
 
   var activateMap = function () {
     map.classList.remove('map--faded');
     window.util.removeDisabledAttribute(mapFormElements);
-    window.backend.load(window.main.onSuccess, window.main.onError);
-    window.pin.setMainElementPosition(HALF_MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE);
+    window.pin.setMainElementPosition(window.pin.HALF_MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE);
   };
 
   var hideEmptyAdCardBlocks = function (adCardElement) {
@@ -42,8 +43,8 @@
     closeCard();
     hideEmptyAdCardBlocks(adCardElement);
 
-    document.addEventListener('click', onPopupCloseBtnPress);
-    document.addEventListener('keydown', onPopupEscPress);
+    document.addEventListener('click', onCardCloseBtnPress);
+    document.addEventListener('keydown', onCardEscPress);
   };
 
   mapPinsContainer.addEventListener('click', function (evt) {
@@ -69,19 +70,27 @@
       currentPin.classList.remove('map__pin--active');
       card.remove();
     }
-
-    document.removeEventListener('click', onPopupCloseBtnPress);
-    document.removeEventListener('click', onPopupEscPress);
+    document.removeEventListener('click', onCardCloseBtnPress);
+    document.removeEventListener('keydown', onCardEscPress);
   };
 
-  var onPopupCloseBtnPress = function (evt) {
+  var removeCard = function () {
+    var card = map.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+    document.removeEventListener('click', onCardCloseBtnPress);
+    document.removeEventListener('keydown', onCardEscPress);
+  };
+
+  var onCardCloseBtnPress = function (evt) {
     var closeBtn = document.querySelector('.popup__close');
     if (evt.target === closeBtn) {
       closeCard();
     }
   };
 
-  var onPopupEscPress = function (evt) {
+  var onCardEscPress = function (evt) {
     if (evt.keyCode === ESC_BTN) {
       evt.preventDefault();
       closeCard();

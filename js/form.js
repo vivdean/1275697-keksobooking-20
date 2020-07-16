@@ -14,13 +14,15 @@
   var timeOut = adForm.querySelector('#timeout');
 
   var deactivateForm = function () {
+    adForm.classList.add('ad-form--disabled');
     window.util.setDisabledAttribute(fieldsets);
+    adForm.reset();
   };
 
   var activateForm = function () {
     adForm.classList.remove('ad-form--disabled');
-    addressField.setAttribute('readonly', true);
     window.util.removeDisabledAttribute(fieldsets);
+    addressField.setAttribute('readonly', true);
   };
 
   var setAddress = function (el) {
@@ -50,7 +52,15 @@
     validateRoomCapacity();
   });
 
-  var addTypeChangeHandler = function (evt) {
+  var onSubmit = function (evt) {
+    evt.preventDefault();
+    window.backend.uploadData(new FormData(adForm), window.main.onUploadSuccess, window.main.onError);
+    adForm.removeEventListener('submit', onSubmit);
+  };
+
+  adForm.addEventListener('submit', onSubmit);
+
+  var onChangeAccomodationType = function (evt) {
     var minPrice = window.card.ACCOMODATION_TYPES[evt.target.value].minPrice;
     setMinPrice(minPrice);
   };
@@ -60,7 +70,7 @@
     accomodationPrice.placeholder = minPrice;
   };
 
-  accomodationType.addEventListener('change', addTypeChangeHandler);
+  accomodationType.addEventListener('change', onChangeAccomodationType);
 
   var setChangeTime = function (first, second) {
     first.addEventListener('change', function () {
@@ -75,5 +85,6 @@
     deactivate: deactivateForm,
     activate: activateForm,
     setAddress: setAddress,
+    element: adForm,
   };
 })();
