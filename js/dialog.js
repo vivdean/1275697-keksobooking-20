@@ -90,5 +90,6 @@
     onLoadSuccess: onLoadSuccess,
     onError: onError,
     onUploadSuccess: onUploadSuccess,
+    MAX_PINS_COUNT: MAX_PINS_COUNT,
   };
 })();

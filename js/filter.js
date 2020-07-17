@@ -17,6 +17,6 @@
     var filteredOffers = window.offers.filter(function (ad) {
       return getType(ad);
     });
-    window.pin.render(filteredOffers);
+    window.pin.render(filteredOffers.slice(0, window.dialog.MAX_PINS_COUNT));
   });
 })();
