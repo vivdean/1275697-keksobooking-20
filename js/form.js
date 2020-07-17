@@ -54,8 +54,7 @@
 
   var onSubmit = function (evt) {
     evt.preventDefault();
-    window.backend.uploadData(new FormData(adForm), window.main.onUploadSuccess, window.main.onError);
-    adForm.removeEventListener('submit', onSubmit);
+    window.backend.uploadData(new FormData(adForm), window.dialog.onUploadSuccess, window.dialog.onError);
   };
 
   adForm.addEventListener('submit', onSubmit);
@@ -86,5 +85,6 @@
     activate: activateForm,
     setAddress: setAddress,
     element: adForm,
+    addressField: addressField,
   };
 })();
