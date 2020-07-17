@@ -8,17 +8,12 @@
   };
   var TIMEOUT_IN_MS = 10000;
 
-  var createXhr = function () {
+  var createXhr = function (onSuccess, onError) {
 
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.timeout = TIMEOUT_IN_MS;
 
-    return xhr;
-  };
-
-  var load = function (onSuccess, onError) {
-    var xhr = createXhr();
     xhr.addEventListener('load', function () {
 
       if (xhr.status === StatusCode.OK) {
@@ -34,20 +29,18 @@
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
+
+    return xhr;
+  };
+
+  var load = function (onSuccess, onError) {
+    var xhr = createXhr(onSuccess, onError);
     xhr.open('GET', URL_LOAD);
     xhr.send();
   };
 
   var upload = function (data, onSuccess, onError) {
-    var xhr = createXhr();
-    xhr.addEventListener('load', function () {
-
-      if (xhr.status === StatusCode.OK) {
-        onSuccess();
-      } else {
-        onError();
-      }
-    });
+    var xhr = createXhr(onSuccess, onError);
     xhr.open('POST', URL_UPLOAD);
     xhr.send(data);
   };
