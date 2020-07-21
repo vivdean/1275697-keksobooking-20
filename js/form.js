@@ -54,7 +54,10 @@
 
   var onSubmit = function (evt) {
     evt.preventDefault();
-    window.backend.uploadData(new FormData(adForm), window.dialog.onUploadSuccess, window.dialog.onError);
+    window.backend.uploadData(
+        new FormData(adForm),
+        window.dialog.showSuccess,
+        window.dialog.showError);
   };
 
   adForm.addEventListener('submit', onSubmit);
