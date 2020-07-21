@@ -27,11 +27,11 @@
     var photoCard = photoList.querySelector('.popup__photo').cloneNode(true);
     photoList.innerHTML = '';
 
-    for (var i = 0; i < ad.offer.photos.length; i++) {
+    ad.offer.photos.forEach(function (photo) {
       var photoElement = photoCard.cloneNode(true);
-      photoElement.src = ad.offer.photos[i];
+      photoElement.src = photo;
       photoList.appendChild(photoElement);
-    }
+    });
   };
 
   var renderAdCardType = function (ad, adCardElement) {
@@ -41,15 +41,14 @@
 
   var renderAdCardFeatures = function (ad, adCardElement) {
     var featuresList = adCardElement.querySelector('.popup__features');
-    var features = featuresList.querySelectorAll('.popup__feature');
+    featuresList.innerHTML = '';
 
-    for (var i = 0; i < features.length; i++) {
-      if (ad.offer.features[i]) {
-        features[i].textContent = ad.offer.features[i];
-      } else {
-        featuresList.removeChild(features[i]);
-      }
-    }
+    ad.offer.features. forEach(function (feature) {
+      var featureElement = document.createElement('li');
+      featureElement.classList.add('popup__feature');
+      featureElement.classList.add('popup__feature--' + feature);
+      featuresList.appendChild(featureElement);
+    });
   };
 
   var createAdCard = function (ad) {

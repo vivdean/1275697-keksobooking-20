@@ -5,6 +5,7 @@
   window.offers = [];
 
   var ENTER_BTN = 13;
+  var MAX_PINS_COUNT = 5;
 
   var reserBtn = document.querySelector('.ad-form__reset');
 
@@ -25,7 +26,7 @@
   var activatePage = function () {
     if (!isActive) {
       isActive = true;
-      window.backend.loadData(window.dialog.onLoadSuccess, window.dialog.onError);
+      window.backend.loadData(onLoadSuccess, window.dialog.showError);
       window.map.activate();
       window.form.activate();
       reserBtn.addEventListener('click', deactivatePage);
@@ -38,9 +39,19 @@
     window.map.deactivate();
   };
 
+  var onLoadSuccess = function (data) {
+    data.forEach(function (offerItem, index) {
+      offerItem.id = (index + 1);
+    });
+    window.offers = data;
+    window.pin.render(window.offers.slice(0, MAX_PINS_COUNT));
+    window.util.removeDisabledAttribute(window.map.formElements);
+  };
+
   deactivatePage();
 
   window.main = {
     deactivatePage: deactivatePage,
+    MAX_PINS_COUNT: MAX_PINS_COUNT,
   };
 })();

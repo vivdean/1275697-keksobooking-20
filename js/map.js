@@ -18,6 +18,7 @@
     window.util.setDisabledAttribute(mapFormElements);
     window.pin.remove();
     removeCard();
+    mapForm.reset();
   };
 
   var activateMap = function () {

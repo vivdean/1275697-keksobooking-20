@@ -2,22 +2,12 @@
 
 (function () {
   var ESC_BTN = 27;
-  var MAX_PINS_COUNT = 5;
 
   var mainContainer = document.querySelector('main');
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
-  var onLoadSuccess = function (data) {
-    data.forEach(function (offerItem, index) {
-      offerItem.id = (index + 1);
-    });
-    window.offers = data;
-    window.pin.render(window.offers.slice(0, MAX_PINS_COUNT));
-    window.util.removeDisabledAttribute(window.map.formElements);
-  };
-
-  var onUploadSuccess = function () {
+  var showSuccess = function () {
     var successElement = successTemplate.cloneNode(true);
     mainContainer.appendChild(successElement);
 
@@ -28,17 +18,17 @@
   var onSuccessEscPress = function (evt) {
     if (evt.keyCode === ESC_BTN) {
       evt.preventDefault();
-      removeSuccessElement();
+      removeSuccessDialog();
     }
   };
 
   var onSuccessCloseClick = function (evt) {
     if (!evt.target.classList.contains('success__message')) {
-      removeSuccessElement();
+      removeSuccessDialog();
     }
   };
 
-  var removeSuccessElement = function () {
+  var removeSuccessDialog = function () {
     var successElement = document.querySelector('.success');
     successElement.remove();
     window.main.deactivatePage();
@@ -46,7 +36,7 @@
     successElement.removeEventListener('click', onSuccessCloseClick);
   };
 
-  var onError = function (message) {
+  var showError = function (message) {
     var errorElement = errorTemplate.cloneNode(true);
     var errorBtn = errorElement.querySelector('.error__button');
     var errorMessage = errorElement.querySelector('.error__message');
@@ -57,7 +47,7 @@
     document.addEventListener('mousedown', onErrorCloseClick);
   };
 
-  var removeErrorElement = function () {
+  var removeErrorDialog = function () {
     var errorElement = document.querySelector('.error');
     var errorBtn = errorElement.querySelector('.error__button');
     errorElement.remove();
@@ -69,27 +59,25 @@
 
   var onErrorCloseBtnPress = function (evt) {
     if (evt.target.classList.contains('error__button')) {
-      removeErrorElement();
+      removeErrorDialog();
     }
   };
 
   var onErrorCloseClick = function (evt) {
     if (!evt.target.classList.contains('error__message')) {
-      removeErrorElement();
+      removeErrorDialog();
     }
   };
 
 
   var onErrorEscPress = function (evt) {
     if (evt.keyCode === ESC_BTN) {
-      removeErrorElement();
+      removeErrorDialog();
     }
   };
 
   window.dialog = {
-    onLoadSuccess: onLoadSuccess,
-    onError: onError,
-    onUploadSuccess: onUploadSuccess,
-    MAX_PINS_COUNT: MAX_PINS_COUNT,
+    showError: showError,
+    showSuccess: showSuccess,
   };
 })();
