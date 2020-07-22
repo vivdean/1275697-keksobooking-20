@@ -112,7 +112,7 @@
 
         mainPin.style.left = mainPinCoordsX + 'px';
         mainPin.style.top = mainPinCoordsY + 'px';
-        window.form.setAddress(mainPinPosition);
+        window.form.addressField.value = mainPinPosition;
       } return;
     };
 
