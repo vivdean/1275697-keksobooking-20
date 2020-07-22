@@ -41,6 +41,7 @@
   };
 
   var createPreviewImg = function () {
+    photoPreviewContainer.innerHTML = '';
     var previewImg = document.createElement('img');
     previewImg.width = imgAttributes.width;
     previewImg.height = imgAttributes.height;
