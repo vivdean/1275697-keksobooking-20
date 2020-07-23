@@ -45,6 +45,7 @@
     });
     window.offers = data;
     window.pin.render(window.offers.slice(0, MAX_PINS_COUNT));
+
     window.util.removeDisabledAttribute(window.map.formElements);
   };
 
