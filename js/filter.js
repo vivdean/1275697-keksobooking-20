@@ -53,7 +53,7 @@
     });
   };
 
-  mapForm.addEventListener('change', function () {
+  var updateOffers = function () {
     window.map.removeCard();
     window.pin.remove();
     var filteredOffers = [];
@@ -66,6 +66,11 @@
         }
       }
     }
-    window.debounce(window.pin.render(filteredOffers));
-  });
+    window.pin.render(filteredOffers);
+  };
+
+  var onFilterChange = window.debounce(updateOffers);
+
+  mapForm.addEventListener('change', onFilterChange);
+
 })();

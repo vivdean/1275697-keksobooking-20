@@ -7,7 +7,7 @@
   var ENTER_BTN = 13;
   var MAX_PINS_COUNT = 5;
 
-  var reserBtn = document.querySelector('.ad-form__reset');
+  var resetBtn = document.querySelector('.ad-form__reset');
 
   var isActive = false;
 
@@ -29,7 +29,7 @@
       window.backend.loadData(onLoadSuccess, window.dialog.showError);
       window.map.activate();
       window.form.activate();
-      reserBtn.addEventListener('click', deactivatePage);
+      resetBtn.addEventListener('click', deactivatePage);
     }
   };
 

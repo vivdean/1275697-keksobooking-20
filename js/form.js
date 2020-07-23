@@ -2,6 +2,13 @@
 
 (function () {
   var MAX_ROOMS = 100;
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
+  var imgAttributes = {
+    width: '45',
+    height: '40',
+    alt: 'Фотография',
+  };
 
   var adForm = document.querySelector('.ad-form');
   var fieldsets = adForm.querySelectorAll('fieldset');
@@ -12,21 +19,63 @@
   var accomodationType = adForm.querySelector('#type');
   var timeIn = adForm.querySelector('#timein');
   var timeOut = adForm.querySelector('#timeout');
+  var avatarChooser = document.querySelector('.ad-form__field  input[type=file]');
+  var photoChooser = document.querySelector('.ad-form__upload  input[type=file]');
+  var avatarPreview = document.querySelector('.ad-form-header__preview img');
+  var photoPreviewContainer = document.querySelector('.ad-form__photo');
+  var avararDefaultSrc = avatarPreview.src;
 
   var deactivateForm = function () {
+    adForm.reset();
     adForm.classList.add('ad-form--disabled');
     window.util.setDisabledAttribute(fieldsets);
-    adForm.reset();
+    deletePreviews();
   };
 
   var activateForm = function () {
     adForm.classList.remove('ad-form--disabled');
     window.util.removeDisabledAttribute(fieldsets);
     addressField.setAttribute('readonly', true);
+    uploadFile(avatarChooser, avatarPreview);
+    uploadFile(photoChooser, photoPreviewContainer);
   };
 
-  var setAddress = function (el) {
-    addressField.value = el;
+  var createPreviewImg = function () {
+    photoPreviewContainer.innerHTML = '';
+    var previewImg = document.createElement('img');
+    previewImg.width = imgAttributes.width;
+    previewImg.height = imgAttributes.height;
+    previewImg.alt = imgAttributes.alt;
+    photoPreviewContainer.appendChild(previewImg);
+    return previewImg;
+  };
+
+  var uploadFile = function (fileChooser, preview) {
+    fileChooser.addEventListener('change', function () {
+      var file = fileChooser.files[0];
+      var fileName = file.name.toLowerCase();
+
+      var matches = FILE_TYPES.some(function (it) {
+        return fileName.endsWith(it);
+      });
+
+      if (matches) {
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+          if (preview.tagName !== 'IMG') {
+            preview = createPreviewImg();
+          }
+          preview.src = reader.result;
+        });
+        reader.readAsDataURL(file);
+      }
+    });
+  };
+
+  var deletePreviews = function () {
+    avatarPreview.src = avararDefaultSrc;
+    photoPreviewContainer.innerHTML = '';
   };
 
   var validateRoomCapacity = function () {
@@ -86,7 +135,6 @@
   window.form = {
     deactivate: deactivateForm,
     activate: activateForm,
-    setAddress: setAddress,
     element: adForm,
     addressField: addressField,
   };
