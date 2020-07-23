@@ -25,7 +25,7 @@
   var renderAdCardPhotos = function (ad, adCardElement) {
     var photoList = adCardElement.querySelector('.popup__photos');
 
-    if (ad.offer.photos.length !== 0) {
+    if (ad.offer.photos.length) {
       var photoCard = photoList.querySelector('.popup__photo').cloneNode(true);
       photoList.innerHTML = '';
 
@@ -42,7 +42,7 @@
   var renderAdCardFeatures = function (ad, adCardElement) {
     var featuresList = adCardElement.querySelector('.popup__features');
 
-    if (ad.offer.features.length !== 0) {
+    if (ad.offer.features.length) {
       featuresList.innerHTML = '';
 
       ad.offer.features. forEach(function (feature) {
