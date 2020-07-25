@@ -1,15 +1,14 @@
 'use strict';
 
 (function () {
-
-  window.offers = [];
-
   var ENTER_BTN = 13;
   var MAX_PINS_COUNT = 5;
 
-  var resetBtn = document.querySelector('.ad-form__reset');
+  window.offers = [];
 
   var isActive = false;
+
+  var resetBtn = document.querySelector('.ad-form__reset');
 
   window.pin.mainElement.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_BTN) {
@@ -29,7 +28,9 @@
       window.backend.loadData(onLoadSuccess, window.dialog.showError);
       window.map.activate();
       window.form.activate();
-      resetBtn.addEventListener('click', deactivatePage);
+      resetBtn.addEventListener('click', function () {
+        deactivatePage();
+      });
     }
   };
 
@@ -45,7 +46,6 @@
     });
     window.offers = data;
     window.pin.render(window.offers.slice(0, MAX_PINS_COUNT));
-
     window.util.removeDisabledAttribute(window.map.formElements);
   };
 

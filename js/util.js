@@ -2,15 +2,15 @@
 
 (function () {
   var setDisabledAttribute = function (formElements) {
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].setAttribute('disabled', true);
-    }
+    formElements.forEach(function (formElement) {
+      formElement.setAttribute('disabled', true);
+    });
   };
 
   var removeDisabledAttribute = function (formElements) {
-    for (var i = 0; i < formElements.length; i++) {
-      formElements[i].removeAttribute('disabled', true);
-    }
+    formElements.forEach(function (formElement) {
+      formElement.removeAttribute('disabled', true);
+    });
   };
 
   window.util = {

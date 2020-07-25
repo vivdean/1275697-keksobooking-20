@@ -27,9 +27,11 @@
 
   var deactivateForm = function () {
     adForm.reset();
+    setDefaultMinPrice();
     adForm.classList.add('ad-form--disabled');
     window.util.setDisabledAttribute(fieldsets);
     deletePreviews();
+    setDefaultCustomValidity();
   };
 
   var activateForm = function () {
@@ -84,22 +86,24 @@
 
     if (roomNumberValue === MAX_ROOMS && roomCapacityValue !== 0 || roomNumberValue !== MAX_ROOMS && roomCapacityValue === 0) {
       roomCapacity.setCustomValidity('Не для гостей');
-      return;
-    }
-
-    if (roomCapacityValue > roomNumberValue) {
+    } else if (roomCapacityValue > roomNumberValue) {
       roomCapacity.setCustomValidity('Количество гостей не должно превышать ' + roomNumberValue);
     } else {
       roomCapacity.setCustomValidity('');
     }
   };
 
-  adForm.addEventListener('change', function (evt) {
-    if (!evt.target.closest('#capacity') && !evt.target.closest('#room_number')) {
-      return;
-    }
+  var setDefaultCustomValidity = function () {
+    roomCapacity.setCustomValidity('');
+  };
+
+  var onCapacityChange = function () {
     validateRoomCapacity();
-  });
+  };
+
+  var onRoomChange = function () {
+    validateRoomCapacity();
+  };
 
   var onSubmit = function (evt) {
     evt.preventDefault();
@@ -109,9 +113,7 @@
         window.dialog.showError);
   };
 
-  adForm.addEventListener('submit', onSubmit);
-
-  var onChangeAccomodationType = function (evt) {
+  var onAccomodationTypeChange = function (evt) {
     var minPrice = window.card.ACCOMODATION_TYPES[evt.target.value].minPrice;
     setMinPrice(minPrice);
   };
@@ -121,7 +123,12 @@
     accomodationPrice.placeholder = minPrice;
   };
 
-  accomodationType.addEventListener('change', onChangeAccomodationType);
+  var setDefaultMinPrice = function () {
+    var defaultType = accomodationType.querySelector('option[selected]');
+    var defaultMinPrice = window.card.ACCOMODATION_TYPES[defaultType.value].minPrice;
+    accomodationPrice.min = defaultMinPrice;
+    accomodationPrice.placeholder = defaultMinPrice;
+  };
 
   var setChangeTime = function (first, second) {
     first.addEventListener('change', function () {
@@ -129,6 +136,10 @@
     });
   };
 
+  roomNumber.addEventListener('change', onCapacityChange);
+  roomCapacity.addEventListener('change', onRoomChange);
+  accomodationType.addEventListener('change', onAccomodationTypeChange);
+  adForm.addEventListener('submit', onSubmit);
   setChangeTime(timeIn, timeOut);
   setChangeTime(timeOut, timeIn);
 

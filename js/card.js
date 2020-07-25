@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var adCard = document.querySelector('#card').content.querySelector('.map__card');
-
   var ACCOMODATION_TYPES = {
     'palace': {
       title: 'Дворец',
@@ -21,6 +19,8 @@
       minPrice: 0,
     }
   };
+
+  var adCard = document.querySelector('#card').content.querySelector('.map__card');
 
   var renderAdCardPhotos = function (ad, adCardElement) {
     var photoList = adCardElement.querySelector('.popup__photos');

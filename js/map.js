@@ -11,7 +11,7 @@
   var mapPinsContainer = map.querySelector('.map__pins');
 
   var deactivateMap = function () {
-    window.pin.setDefaultMainPinPosition();
+    window.pin.setDefaultMainElementPosition();
     map.classList.add('map--faded');
     mapForm.classList.add('.map__filters--disabled');
     window.util.setDisabledAttribute(mapFormElements);
@@ -23,7 +23,7 @@
   var activateMap = function () {
     map.classList.remove('map--faded');
     mapForm.classList.remove('.map__filters--disabled');
-    window.pin.setMainElementPosition(window.pin.HALF_MAIN_PIN_WIDTH, MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE);
+    window.pin.setMainElementPosition(window.pin.HALF_MAIN_ELEMENT_WIDTH, MAIN_PIN_HEIGHT_FOR_ACTIVE_PAGE);
   };
 
   var renderAdCard = function (ad) {

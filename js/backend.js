@@ -1,12 +1,13 @@
 'use strict';
 
 (function () {
+  var TIMEOUT_IN_MS = 10000;
+
   var URL_LOAD = 'https://javascript.pages.academy/keksobooking/data';
   var URL_UPLOAD = 'https://javascript.pages.academy/keksobooking';
   var StatusCode = {
     OK: 200
   };
-  var TIMEOUT_IN_MS = 10000;
 
   var createXhr = function (onSuccess, onError) {
 
